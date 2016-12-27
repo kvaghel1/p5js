@@ -13,31 +13,20 @@ function Snake() {
 	}
 
 	this.update = function() {
-
-		/*if(this.total === this.last_pos.length) {
-			for(var i = 0 ; i< this.last_pos -1  ;i++) {
-				this.last_pos[i] = this.last_pos[i+1];
-			}
-		}
-
-		this.last_pos[this.total - 1 ] = createVector(this.x,this.y)*/
-		
 		this.x = this.x + this.xspeed*scl;
 		this.y = this.y + this.yspeed*scl;
-		
+		console.log("Points:",this.x,this.y);
 		this.last_pos.push(createVector(this.x,this.y));
 
-		this.x = constrain(this.x,0,width-scl);
-		this.y = constrain(this.y,0,height-scl);
+//		this.x = constrain(this.x,0,width-scl);
+//		this.y = constrain(this.y,0,height-scl);
 	}
 
 	this.show = function() {
 		fill(255);
-		/*for(var i = 1 ; i <= this.total ; i++) {
-			console.log(i,this.total);
-			rect(this.x - ((this.xspeed*scl)*i) ,this.y - ((this.yspeed*scl)*i),scl,scl);
-		}*/
+
 		var l = this.last_pos.length;
+
 		for(var i = 0 ; i < this.total ; i++) {
 			//console.log(i,this.total);
 			rect(this.last_pos[l-i-1].x ,this.last_pos[l-i-1].y,scl,scl);
@@ -54,5 +43,30 @@ function Snake() {
 		}
 	}
 
+	this.dead = function() {
+		var check_dead = (this.x < 0 || this.x > width-scl || this.y < 0 || this.y > height-scl )
+		var l = this.last_pos.length ;
 
+		if( !check_dead ){
+			for(var i = 2 ; i < this.total-1 ; i++) {
+				var d = dist(this.x,this.y,this.last_pos[l-i].x,this.last_pos[l-i].y);
+				console.log("D:",this.x,this.y,this.last_pos[l-i].x,this.last_pos[l-i].y,d);
+				if ( d == 0) {
+					check_dead = true;
+					break;
+				}
+				else {
+					check_dead = false;
+				}
+
+			}
+		}
+
+		if(check_dead) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
 }
